@@ -1,0 +1,20 @@
+{
+  "name": "fullstack-open-2021-part11-blogs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "frontend": "cd blogs-frontend && npm start",
+    "api": "cd blogs-backend && npm start",
+    "dev:api": "cd blogs-backend && npm run dev",
+    "dev:frontend": "cd blogs-frontend && npm start",
+    "lint:api": "cd blogs-backend && npm run lint",
+    "lint:frontend": "cd blogs-frontend && npm run lint",
+    "test:api": "cd blogs-backend && npm run test",
+    "build:frontend": "cd blogs-frontend && npm run build",
+    "install:api": "cd blogs-backend && npm install",
+    "install:frontend": "cd blogs-frontend && npm install"
+  },
+  "author": "",
+  "license": "ISC"
+}
