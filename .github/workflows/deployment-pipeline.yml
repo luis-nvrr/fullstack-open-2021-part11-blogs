@@ -1,0 +1,69 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
+
+jobs:
+  simple_deployment_pipeline:
+    runs-on: ubuntu-latest
+    env:
+      TEST_MONGODB_URI: ${{secrets.TEST_URL}}
+      MONGOMONGODB_URI: ${{secrets.URL}}
+      PORT: ${{secrets.PORT}}
+      SECRET: ${{secrets.SECRET}}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "16.x"
+      - name: npm install backend
+        run: npm run install:api
+      - name: npm install frontend
+        run: npm run install:frontend
+      - name: lint backend
+        run: npm run lint:api
+      - name: lint frontend
+        run: npm run lint:api
+      - name: test backend
+        run: npm run test:api
+      - name: build frontend
+        run: npm run build:frontend
+      - name: deploy
+        id: deploy
+        if: ${{ github.event_name == 'push' }}
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "luisnvrr-blogs-cicd"
+          heroku_email: "luisfnvrr@gmail.com"
+          healthcheck: "https://luisnvrr-blogs-cicd.herokuapp.com/health"
+          checkstring: "ok"
+          rollbackonhealthcheckfailed: true
+      - name: notificate on failure
+        if: ${{ failure() && github.event_name == 'push' }}
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: notificate on success
+        if: github.event_name == 'push' && steps.deploy.outcome == 'success'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          fields: job,commit,author,took
+          custom_payload: |
+            {
+              attachments: [{
+                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+                text: `A new version deployed to https://luisnvrr-blogs-cicd.herokuapp.com \n(${process.env.AS_COMMIT}) by ${process.env.AS_AUTHOR} \nbuild took ${process.env.AS_TOOK}`,
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
