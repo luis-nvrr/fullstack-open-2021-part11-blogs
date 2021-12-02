@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TEST_MONGODB_URI: ${{secrets.TEST_URL}}
-      MONGOMONGODB_URI: ${{secrets.URL}}
+      MONGODB_URI: ${{secrets.URL}}
       PORT: ${{secrets.PORT}}
       SECRET: ${{secrets.SECRET}}
     steps:
@@ -44,6 +44,11 @@ jobs:
           healthcheck: "https://luisnvrr-blogs-cicd.herokuapp.com/health"
           checkstring: "ok"
           rollbackonhealthcheckfailed: true
+        env:
+          HD_TEST_MONGODB_URI: ${{secrets.TEST_URL}}
+          HD_MONGODB_URI: ${{secrets.URL}}
+          HD_PORT: ${{secrets.PORT}}
+          HD_SECRET: ${{secrets.SECRET}}
       - name: notificate on failure
         if: ${{ failure() && github.event_name == 'push' }}
         uses: 8398a7/action-slack@v3
