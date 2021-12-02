@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, Box } from '@chakra-ui/react'
+import { Link as ReactLink } from 'react-router-dom'
+import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, Box, Link } from '@chakra-ui/react'
 
 const UsersView = () => {
   const users = useSelector((state) => state.users)
@@ -20,7 +20,9 @@ const UsersView = () => {
           {users.map((user) => (
             <Tr key={user.id}>
               <Td>
-                <Link to={`/users/${user.id}`}>{user.name}</Link>
+                <Link as={ReactLink} to={`/users/${user.id}`}>
+                  {user.name}
+                </Link>
               </Td>
               <Td isNumeric>{user.blogs.length}</Td>
             </Tr>

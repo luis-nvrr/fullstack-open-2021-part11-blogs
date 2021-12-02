@@ -1,6 +1,6 @@
 import React from 'react'
-import { Navigate, Link } from 'react-router-dom'
-import { ListItem, ListIcon, List, Alert, AlertIcon, Stack, Heading } from '@chakra-ui/react'
+import { Navigate, Link as ReactLink } from 'react-router-dom'
+import { ListItem, ListIcon, List, Alert, AlertIcon, Stack, Heading, Link } from '@chakra-ui/react'
 import { BiNote } from 'react-icons/bi'
 import { useSelector } from 'react-redux'
 
@@ -28,7 +28,9 @@ const UserBlogs = ({ user }) => {
         {userBlogs.map((blog) => (
           <ListItem key={blog.id}>
             <ListIcon as={BiNote} color="green.500" />
-            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+            <Link as={ReactLink} to={`/blogs/${blog.id}`}>
+              {blog.title}
+            </Link>
           </ListItem>
         ))}
       </List>
