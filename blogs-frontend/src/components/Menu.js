@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link as ReactLink } from 'react-router-dom'
 import Logout from './Logout'
-import { Flex, Stack, Spacer, Box, Heading, Breadcrumb, BreadcrumbItem } from '@chakra-ui/react'
+import { Flex, Stack, Spacer, Box, Heading, Breadcrumb, BreadcrumbItem, Link } from '@chakra-ui/react'
 
 const Menu = () => {
   return (
@@ -14,12 +13,16 @@ const Menu = () => {
         <Breadcrumb>
           <BreadcrumbItem>
             <Box color="teal.500">
-              <Link to="/">blogs</Link>
+              <Link as={ReactLink} to="/">
+                blogs
+              </Link>
             </Box>
           </BreadcrumbItem>
           <BreadcrumbItem>
             <Box color="teal.500">
-              <Link to="/users">users</Link>
+              <Link as={ReactLink} to="/users">
+                users
+              </Link>
             </Box>
           </BreadcrumbItem>
         </Breadcrumb>
